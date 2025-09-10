@@ -396,7 +396,8 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, verb
     """Download the latest template release from GitHub using HTTP requests.
     Returns (zip_path, metadata_dict)
     """
-    repo_owner = "github"
+    # 修复仓库所有者和名称，使用当前仓库的配置
+    repo_owner = "oktetopython"
     repo_name = "spec-kit"
     
     if verbose:
@@ -770,8 +771,10 @@ def init(
                 agent_tool_missing = True
         elif selected_ai == "iflow":
             if not check_tool("iflow", "Install from: https://platform.iflow.cn/cli/install"):
-                console.print("[red]Error:[/red] iFlow CLI is required for iFlow projects")
-                agent_tool_missing = True
+                console.print("[yellow]Warning:[/yellow] iFlow CLI not found, but continuing with template setup")
+                console.print("[yellow]Tip:[/yellow] Install iFlow CLI from https://platform.iflow.cn/cli/install for full functionality")
+                # 不将 iFlow CLI 缺失视为错误，允许继续进行
+                # agent_tool_missing = True
         # GitHub Copilot check is not needed as it's typically available in supported IDEs
         
         if agent_tool_missing:
